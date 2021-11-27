@@ -1,0 +1,39 @@
+name: kernelbakery with snapshot packages
+
+on:
+  workflow_call:
+    inputs:
+      kernelbakery_branch:
+        required: true
+        type: string
+      picontrol_branch:
+        required: true
+        type: string
+
+jobs:
+  build_snapshot_packages:
+    name: kernelbakery
+    runs-on: [self-hosted]
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Run kernelbakery
+      uses: RevolutionPi/action-build-kernel@main
+      id: build
+      with:
+        changelog_update: 1
+        kernelbakery_branch: ${{ inputs.kernelbakery_branch }}
+        picontrol_branch: ${{ inputs.picontrol_branch }}
+
+    - name: Upload kernel package artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ steps.build.outputs.filename_kernel }}
+        path: ${{ steps.build.outputs.filename_kernel }}
+
+    - name: Upload kernel-headers package artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ steps.build.outputs.filename_headers }}
+        path: ${{ steps.build.outputs.filename_headers }}
