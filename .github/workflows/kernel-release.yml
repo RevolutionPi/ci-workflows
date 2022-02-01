@@ -1,0 +1,42 @@
+name: kernelbakery with nightly snapshot packages
+
+on:
+  workflow_call:
+    inputs:
+      changelog_update:
+        required: false
+        default: 0
+      release_name:
+        required: true
+        type: string
+      kernelbakery_branch:
+        required: true
+        type: string
+      picontrol_branch:
+        required: true
+        type: string
+
+jobs:
+  build_snapshot_packages:
+    name: kernelbakery
+    runs-on: [self-hosted]
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Run kernelbakery
+      uses: RevolutionPi/action-build-kernel@main
+      id: build
+      with:
+        changelog_update: ${{ inputs.changelog_update }}
+        kernelbakery_branch: ${{ inputs.kernelbakery_branch }}
+        picontrol_branch: ${{ inputs.picontrol_branch }}
+
+    - name: Create release
+      uses: pyTooling/Actions/releaser@r0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ inputs.release_name }}
+        files: |
+          ${{ steps.build.outputs.filename_kernel }}
+          ${{ steps.build.outputs.filename_headers }}
