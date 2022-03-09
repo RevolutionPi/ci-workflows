@@ -9,6 +9,9 @@ on:
       picontrol_branch:
         required: true
         type: string
+      build_commit:
+        required: false
+        type: string
 
 jobs:
   build_snapshot_packages:
@@ -25,6 +28,7 @@ jobs:
         changelog_update: 1
         kernelbakery_branch: ${{ inputs.kernelbakery_branch }}
         picontrol_branch: ${{ inputs.picontrol_branch }}
+        build_commit: ${{ inputs.build_commit }}
 
     - name: Upload kernel package artifact
       uses: actions/upload-artifact@v2
