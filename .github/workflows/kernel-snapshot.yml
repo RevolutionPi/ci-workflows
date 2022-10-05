@@ -12,6 +12,10 @@ on:
       build_commit:
         required: false
         type: string
+      arch:
+        type: string
+        required: false
+        default: arm
 
 jobs:
   build_snapshot_packages:
@@ -29,6 +33,7 @@ jobs:
         kernelbakery_branch: ${{ inputs.kernelbakery_branch }}
         picontrol_branch: ${{ inputs.picontrol_branch }}
         build_commit: ${{ inputs.build_commit }}
+        arch: ${{ inputs.arch }}
 
     - name: Upload kernel package artifact
       uses: actions/upload-artifact@v2
