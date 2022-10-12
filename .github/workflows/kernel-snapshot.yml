@@ -23,7 +23,7 @@ jobs:
     runs-on: [self-hosted]
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Run kernelbakery
       uses: RevolutionPi/action-build-kernel@main
@@ -36,13 +36,13 @@ jobs:
         arch: ${{ inputs.arch }}
 
     - name: Upload kernel package artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.build.outputs.filename_kernel }}
         path: ${{ steps.build.outputs.filename_kernel }}
 
     - name: Upload kernel-headers package artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.build.outputs.filename_headers }}
         path: ${{ steps.build.outputs.filename_headers }}
